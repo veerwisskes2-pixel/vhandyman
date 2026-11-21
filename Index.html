@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICTOR HANDYMAN | Plumbing, Painting, Paving, Tiling, Electricity</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+  body{background:#f2f2f2;color:#222}
+  .topbar{background:#111;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+  .topbar b{font-size:20px}.topbar b span{color:#ffcc00}
+  .topbar a{color:#fff;text-decoration:none;font-size:13px;background:#0096e6;padding:8px 12px;border-radius:20px}
+  .welcome-banner{background:linear-gradient(135deg,#0a2a4d,#0096e6);color:#fff;padding:22px 16px;text-align:center}
+  .welcome-banner h1{font-size:26px;line-height:1.3}
+  .welcome-banner h1 span{color:#ffcc00}
+  .welcome-banner p{font-size:15px;line-height:1.6;margin:10px auto;max-width:650px;opacity:.95}
+  .welcome-banner .welcome-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .welcome-banner .welcome-btns a{padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:14px}
+  .welcome-btn-wa{background:#25D366;color:#fff}
+  .welcome-btn-call{background:#ffcc00;color:#111}
+  .welcome-popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+  .welcome-popup-box{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:24px 20px;text-align:center;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .welcome-popup-box h2{font-size:22px;color:#0a2a4d}
+  .welcome-popup-box h2 span{color:#0096e6}
+  .welcome-popup-box p{font-size:14px;color:#555;line-height:1.6;margin:10px 0}
+  .welcome-close{position:absolute;top:10px;right:14px;font-size:22px;cursor:pointer;color:#999}
+  .search-wrap{background:#ffcc00;padding:18px 14px;text-align:center}
+  .search-wrap h1{font-size:24px;margin-bottom:6px}
+  .search-wrap p{font-size:14px;margin-bottom:12px}
+  .search-box{background:#fff;display:flex;border-radius:30px;overflow:hidden;max-width:600px;margin:auto;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .search-box input{flex:1;border:0;padding:14px;outline:none;font-size:15px}
+  .search-box button{border:0;background:#0096e6;color:#fff;padding:0 20px;font-weight:bold;cursor:pointer}
+  .chips{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .chips span{background:#fff;padding:7px 12px;border-radius:20px;font-size:13px;cursor:pointer}
+  .hero{background:#fff;padding:18px 14px;text-align:center}
+  .hero h1{font-size:24px}
+  .hero p{font-size:14px;margin-top:6px;color:#555}
+  .section{max-width:1000px;margin:auto;padding:18px 14px}
+  .section h2{margin-bottom:12px}
+  .folders{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .folder{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer;border:2px solid transparent;text-align:center;padding-bottom:12px}
+  .folder.active{border-color:#0096e6}
+  .folder img{width:100%;height:90px;object-fit:cover}
+  .folder b{display:block;font-size:15px;margin-top:8px}
+  .folder small{font-size:12px;color:#666}
+  .folder span{display:inline-block;background:#0096e6;color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:bold;margin-top:8px}
+  .opened-folder{background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:16px;margin-top:14px;display:none}
+  .opened-folder.open{display:block}
+  .alljobs-folder{background:#0a2a4d;color:#fff;border-radius:16px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .alljobs-folder h2{color:#fff}
+  .alljobs-folder p{font-size:14px;opacity:.9;line-height:1.5;margin:8px 0}
+  .alljobs-btn{background:#ffcc00;color:#111;padding:13px 24px;border-radius:30px;border:0;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px}
+  .alljobs-content{background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:16px;margin-top:14px;display:none}
+  .alljobs-content.open{display:block}
+  .price-box{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .price-head{background:#0a2a4d;color:#fff;padding:14px;display:flex;justify-content:space-between}
+  .price-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #eee;gap:10px}
+  .price-row:last-child{border-bottom:0}
+  .price-row img{width:70px;height:55px;object-fit:cover;border-radius:10px;cursor:pointer}
+  .price-info{flex:1}
+  .price-info b{font-size:15px;cursor:pointer;color:#0a2a4d}
+  .price-info p{font-size:12px;color:#666;margin-top:3px;line-height:1.4}
+  .price-tag{text-align:right;min-width:110px}
+  .price-tag b{font-size:18px;color:#0096e6}
+  .price-tag span{display:block;font-size:11px;color:#888}
+  .price-tag a{display:block;background:#25D366;color:#fff;text-decoration:none;padding:7px 10px;border-radius:20px;font-size:12px;margin-top:6px;text-align:center}
+  .view-btn{display:block;background:#0096e6!important;color:#fff!important;text-decoration:none;padding:7px 10px;border-radius:20px;font-size:12px;margin-top:6px;text-align:center;cursor:pointer;border:0;width:100%;font-weight:bold}
+  .view-btn2{background:#0096e6;color:#fff;padding:8px 14px;border-radius:20px;border:0;font-weight:bold;font-size:13px;cursor:pointer}
+  .areas{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .area-grid{display:none;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+  .area-grid.open{display:grid}
+  .area{background:#eaf6ff;border:1px solid #cceeff;padding:12px;border-radius:12px;text-align:center;font-weight:bold;font-size:14px;cursor:pointer}
+  .area.active{background:#0096e6;color:#fff}
+  .area small{display:block;font-weight:normal;font-size:11px;margin-top:3px}
+  .select-area-btn{background:#0096e6;color:#fff;padding:13px 20px;border-radius:30px;border:0;font-weight:bold;font-size:15px;cursor:pointer;width:100%;margin-top:12px}
+  .listings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .card-top{height:180px;position:relative;cursor:pointer}
+  .card-top img{width:100%;height:100%;object-fit:cover}
+  .card-top .tag{position:absolute;bottom:10px;left:10px;background:#ffcc00;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+  .card-body{padding:14px}
+  .price{font-size:20px;font-weight:bold;color:#0096e6;margin:8px 0}
+  .price small{color:#777;font-weight:normal;font-size:12px}
+  .details{font-size:13px;color:#555;line-height:1.6;background:#f8f8f8;padding:10px;border-radius:10px;margin:8px 0}
+  .btns{display:flex;gap:8px}
+  .btn{flex:1;text-align:center;padding:11px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:14px}
+  .btn-call{background:#0096e6;color:#fff}
+  .btn-wa{background:#25D366;color:#fff}
+  .btn-folder{background:#0a2a4d;color:#fff;width:100%;display:block;text-align:center;padding:11px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:14px;cursor:pointer}
+  .close-btn{background:#111;color:#fff;padding:10px 18px;border-radius:30px;border:0;font-weight:bold;font-size:13px;cursor:pointer;margin-top:12px}
+  .contact{background:#0a2a4d;color:#fff;padding:22px 14px;text-align:center;margin-top:10px}
+  .contact a{color:#ffcc00;font-weight:bold;text-decoration:none}
+  footer{background:#111;color:#aaa;text-align:center;padding:14px;font-size:12px}
+  .video-box{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .video-thumb{position:relative;display:block}
+  .video-thumb img{width:100%;display:block;max-height:420px;object-fit:cover}
+  .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.65);color:#fff;width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px}
+  .video-caption{padding:16px;text-align:center}
+  .video-caption h3{font-size:20px;color:#0a2a4d;margin-bottom:6px}
+  .video-caption p{font-size:14px;color:#555;line-height:1.5}
+  .video-embed{width:100%;aspect-ratio:16/9;border:0;display:block;background:#000}
+  .view-popup{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:10000;padding:16px}
+  .view-popup.open{display:flex}
+  .view-box{background:#fff;border-radius:18px;max-width:440px;width:100%;overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .view-box img{width:100%;height:200px;object-fit:cover;display:block}
+  .view-body{padding:18px}
+  .view-body h2{font-size:21px;color:#0a2a4d;line-height:1.3}
+  .view-body p{font-size:14px;color:#555;line-height:1.6;margin:8px 0}
+  .view-meta{background:#f2f8ff;border-radius:12px;padding:12px;font-size:13px;line-height:1.7;color:#333}
+  .view-meta b{color:#0096e6}
+  .view-actions{display:flex;gap:10px;margin-top:14px}
+  .view-actions a,.view-actions button{flex:1;text-align:center;padding:12px;border-radius:30px;font-weight:bold;font-size:14px;text-decoration:none;border:0;cursor:pointer}
+  .view-book{background:#25D366;color:#fff}
+  .view-close{background:#111;color:#fff}
+  @media(max-width:700px){.listings{grid-template-columns:1fr}.area-grid{grid-template-columns:repeat(2,1fr)}.folders{grid-template-columns:repeat(2,1fr)}.price-row{flex-wrap:wrap}.price-tag{width:100%;text-align:left}.welcome-banner h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="topbar"><b>VICTOR <span>HANDYMAN</span></b><a href="https://wa.me/27646000005">💬 WhatsApp</a></div>
+<div class="welcome-banner"><h1>Welcome to <span>VICTOR HANDYMAN!</span> 👋</h1><p><b>Need it fixed? We fix it right - first time.</b><br>Plumbing, Painting, Paving, Tiling, Ceiling & Electricity.<br>Fast, Clean & Affordable. Free Quote on WhatsApp Today!</p><div class="welcome-btns"><a class="welcome-btn-wa" href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20a%20free%20quote">💬 Get Free Quote</a><a class="welcome-btn-call" href="tel:+27646000005">📞 Call Victor Now</a></div><p style="font-size:12px;opacity:.8;margin-top:10px">⭐ Trusted in Parklands, Table View, Dunoon & 50+ Areas in Cape Town</p></div>
+<div class="welcome-popup" id="welcomePopup"><div class="welcome-popup-box"><span class="welcome-close" onclick="closeWelcome()">✕</span><div style="font-size:40px">👋</div><h2>Welcome to <span>VICTOR HANDYMAN!</span></h2><p><b>Need it fixed? We fix it right - first time.</b><br><br>Plumbing • Painting • Paving • Tiling • Ceiling • Electricity<br>Fast, Clean & Affordable. Free Quote on WhatsApp.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20a%20free%20quote" style="display:block;background:#25D366;color:#fff;padding:13px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:15px;margin-top:6px">Get FREE Quote on WhatsApp</a><a href="#" onclick="closeWelcome();return false;" style="display:block;margin-top:12px;color:#0096e6;font-size:13px;text-decoration:none;font-weight:bold">Continue Browsing →</a></div></div>
+<div class="search-wrap"><h1>What do you need fixed today?</h1><p>Serving Parklands, Table View, Dunoon, Slovo Park, Milnerton & 50+ areas in Cape Town</p><div class="search-box"><input id="searchInput" type="text" placeholder="Search plumbers, painters, tiling..." oninput="searchService()"><button onclick="searchService()">Search</button></div><div class="chips"><span onclick="filterService('Plumbing')">🔧 Plumbing</span><span onclick="filterService('Painting')">🎨 Painting</span><span onclick="filterService('Paving')">🧱 Paving</span><span onclick="filterService('Tiling')">🔲 Tiling</span><span onclick="filterService('Electricity')">⚡ Electricity</span><span onclick="filterService('Ceiling')">⬜ Ceiling</span><span onclick="filterService('Deep Clean and General Cleaning')">🧹 Deep Clean and General Cleaning</span><span onclick="filterService('General Service')">🛠️ General Service</span></div></div>
+<div class="hero"><h1>VICTOR HANDYMAN </h1><p>All Prices • No Hidden Costs • Free Quote on WhatsApp</p><p style="font-size:13px;margin-top:6px">👁️ Tap <b>View</b> on any job to see full details BEFORE you Book.</p></div>
+<div class="section"><h2>📍 Areas We Serve</h2><div class="areas"><p>Based in <b>Parklands</b> - 69 Parklands Main Rd, Parklands, Cape Town, 7441. Call-out: FREE in Parklands, R50 in nearby areas, R80 in other areas.</p><button class="select-area-btn" onclick="toggleAreas()" id="selectAreaBtn">📍 Select Your Area To Book 👇</button><div class="area-grid" id="areaGrid"><div class="area" onclick="selectArea(this,'Parklands')">Parklands<small>FREE</small></div><div class="area" onclick="selectArea(this,'Table View')">Table View<small>R50</small></div><div class="area" onclick="selectArea(this,'Dunoon')">Dunoon<small>R50</small></div><div class="area" onclick="selectArea(this,'Slovo Park')">Slovo Park<small>R50</small></div><div class="area" onclick="selectArea(this,'Killarney Gardens')">Killarney Gardens<small>R50</small></div><div class="area" onclick="selectArea(this,'Richwood')">Richwood<small>R50</small></div><div class="area" onclick="selectArea(this,'Sunningdale')">Sunningdale<small>R50</small></div><div class="area" onclick="selectArea(this,'Bloubergstrand')">Bloubergstrand<small>R50</small></div><div class="area" onclick="selectArea(this,'Milnerton')">Milnerton<small>R50</small></div><div class="area" onclick="selectArea(this,'Century City')">Century City<small>R50</small></div><div class="area" onclick="selectArea(this,'Flamingo Vlei')">Flamingo Vlei<small>R50</small></div><div class="area" onclick="selectArea(this,'Blouberg Rise')">Blouberg Rise<small>R50</small></div><div class="area" onclick="selectArea(this,'West Beach')">West Beach<small>R50</small></div><div class="area" onclick="selectArea(this,'Big Bay')">Big Bay<small>R50</small></div><div class="area" onclick="selectArea(this,'Marconi Beam / Montague Gardens')">Marconi Beam / Montague Gardens<small>R50</small></div><div class="area" onclick="selectArea(this,'Brooklyn')">Brooklyn<small>R50</small></div><div class="area" onclick="selectArea(this,'Ysterplaat')">Ysterplaat<small>R50</small></div><div class="area" onclick="selectArea(this,'Edgemead')">Edgemead<small>R50</small></div><div class="area" onclick="selectArea(this,'Bothasig')">Bothasig<small>R50</small></div><div class="area" onclick="selectArea(this,'Burgundy Estate')">Burgundy Estate<small>R50</small></div><div class="area" onclick="selectArea(this,'Parow')">Parow<small>R80</small></div><div class="area" onclick="selectArea(this,'Goodwood')">Goodwood<small>R80</small></div><div class="area" onclick="selectArea(this,'Rugby')">Rugby<small>R80</small></div><div class="area" onclick="selectArea(this,'Maitland')">Maitland<small>R80</small></div><div class="area" onclick="selectArea(this,'Melkbosstrand')">Melkbosstrand<small>R80</small></div><div class="area" onclick="selectArea(this,'Durbanville')">Durbanville<small>R80</small></div><div class="area" onclick="selectArea(this,'Cape Town CBD')">Cape Town CBD<small>R80</small></div><div class="area" onclick="selectArea(this,'Sea Point')">Sea Point<small>R80</small></div><div class="area" onclick="selectArea(this,'Bellville')">Bellville<small>R80</small></div><div class="area" onclick="selectArea(this,'Brackenfell')">Brackenfell<small>R80</small></div><div class="area" onclick="selectArea(this,'Kraaifontein')">Kraaifontein<small>R80</small></div><div class="area" onclick="selectArea(this,'Atlantis')">Atlantis<small>R80</small></div><div class="area" onclick="selectArea(this,'Delft')">Delft<small>R80</small></div><div class="area" onclick="selectArea(this,'Langa')">Langa<small>R80</small></div><div class="area" onclick="selectArea(this,'Nyanga')">Nyanga<small>R80</small></div><div class="area" onclick="selectArea(this,'Khayelitsha')">Khayelitsha<small>R80</small></div><div class="area" onclick="selectArea(this,'Stellenbosch')">Stellenbosch<small>R80</small></div><div class="area" onclick="selectArea(this,'Observatory')">Observatory<small>R80</small></div><div class="area" onclick="selectArea(this,'Woodstock')">Woodstock<small>R80</small></div><div class="area" onclick="selectArea(this,'Salt River')">Salt River<small>R80</small></div><div class="area" onclick="selectArea(this,'Pinelands')">Pinelands<small>R80</small></div><div class="area" onclick="selectArea(this,'Rondebosch')">Rondebosch<small>R80</small></div><div class="area" onclick="selectArea(this,'Claremont')">Claremont<small>R80</small></div><div class="area" onclick="selectArea(this,'Wynberg')">Wynberg<small>R80</small></div><div class="area" onclick="selectArea(this,'Kenilworth')">Kenilworth<small>R80</small></div><div class="area" onclick="selectArea(this,'Plumstead')">Plumstead<small>R80</small></div><div class="area" onclick="selectArea(this,'Constantia')">Constantia<small>R80</small></div><div class="area" onclick="selectArea(this,'Tokai')">Tokai<small>R80</small></div><div class="area" onclick="selectArea(this,'Hout Bay')">Hout Bay<small>R80</small></div><div class="area" onclick="selectArea(this,'Muizenberg')">Muizenberg<small>R80</small></div><div class="area" onclick="selectArea(this,'Fish Hoek')">Fish Hoek<small>R80</small></div><div class="area" onclick="selectArea(this,'Grassy Park')">Grassy Park<small>R80</small></div><div class="area" onclick="selectArea(this,'Mitchells Plain')">Mitchells Plain<small>R80</small></div><div class="area" onclick="selectArea(this,'Gugulethu')">Gugulethu<small>R80</small></div><div class="area" onclick="selectArea(this,'Philippi')">Philippi<small>R80</small></div><div class="area" onclick="selectArea(this,'Epping')">Epping<small>R80</small></div></div><p id="areaMsg" style="margin-top:12px;font-weight:bold;color:#0096e6">👉 Select your area to book</p></div></div>
+<div class="section"><h2>📁 Choose a Service Folder</h2><p style="font-size:14px;color:#555;margin-bottom:12px">👉 Tap a folder to OPEN it and see its jobs and prices. Tap <b>View</b> to see full details before you Book.</p><div class="folders" id="folderGrid"></div><div class="opened-folder" id="openedFolder"><h2 id="openedTitle">Folder</h2><div id="openedList"></div><button class="close-btn" onclick="closeFolder()">✕ Close Folder</button></div></div>
+<div class="section"><h2>🎥 Watch How We Work</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="removing-tiles.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Removing Old Tiles - Clean, Fast & No Damage</h3><p>Watch Victor removing old tiles carefully before new tiling. We clean everything and leave your house neat.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20tiling%20-%20remove%20old%20tiles" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Tiling on WhatsApp</a></div></div></div>
+<div class="section">
+  <h2>🎥 Watch Plumbing First Fix - 2 Showers, 2 Basins, 2 Toilets</h2>
+  <div class="video-box">
+    <video class="video-embed" controls playsinline preload="metadata">
+      <source src="plumbing-first-fix-2-showers-2-basins-2-toilets.mp4" type="video/mp4">
+    </video>
+    <div class="video-caption">
+      <h3>Plumbing First Fix - Installing Points For 2 Showers, 2 Basins & 2 Toilets</h3>
+      <p>Watch Victor installing all pipework inside the walls before boarding and tiling. 2 Shower Points, 2 Basin Points, 2 Toilet Points. Straight, level, secured - No Leaks. Done right - first time.</p>
+      <a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20plumbing%20first%20fix%20-%202%20showers%2C%202%20basins%2C%202%20toilets" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Plumbing First Fix on WhatsApp</a>
+    </div>
+  </div>
+</div>
+<div class="section"><h2>🎥 Watch Ceiling Installation</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="ceiling.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Installing New Ceiling - Strong, Neat & Perfect Finish</h3><p>Watch how we install a new ceiling step by step. Strong boards, straight lines and a clean perfect finish.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20ceiling%20installation" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Ceiling on WhatsApp</a></div></div></div>
+<div class="section">
+  <h2>🎥 Watch General Work - Ceiling Repair</h2>
+  <div class="video-box">
+    <video class="video-embed" controls playsinline preload="metadata">
+      <source src="ceiling-repair.mp4" type="video/mp4">
+      Your browser does not support video.
+    </video>
+    <div class="video-caption">
+      <h3>General Work - Ceiling Crack Repair & Wall Preparation - Ready for Painting</h3>
+      <p>Watch how we repair ceiling cracks step by step. We remove peeling paint, fill cracks, smooth the ceiling and prepare the walls for painting. Clean, strong and neat finish.</p>
+      <a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20general%20work%20-%20ceiling%20crack%20repair" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Ceiling Repair on WhatsApp</a>
+    </div>
+  </div>
+</div>
+<div class="section"><h2>🎥 Watch Paving Installation</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="paving.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Laying Paving - Strong, Flat & Beautiful Finish</h3><p>Watch how we lay paving step by step. Solid base, straight lines and a strong flat finish for your driveway and yard.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20paving" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Paving on WhatsApp</a></div></div></div>
+<div class="section">
+  <h2>🎥 Watch General Work</h2>
+  <div class="video-box">
+    <video class="video-embed" controls playsinline preload="metadata">
+      <source src="general-work.mp4" type="video/mp4">
+      Your browser does not support video.
+    </video>
+    <div class="video-caption">
+      <h3>General Work - Fixing Water Meter & Cement Repair - Strong & Neat Finish</h3>
+      <p>Watch how we fix broken cement around a water meter step by step. We dig out old broken cement, mix new strong cement, fill, level and smooth it. Strong, flat and neat finish.</p>
+      <a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20general%20work%20-%20water%20meter%20repair" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book General Work on WhatsApp</a>
+    </div>
+  </div>
+</div>
+<div class="section"><h2>🎥 Watch Toilet Installation</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="toilet.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Installing New Toilet - No Leaks, Perfect Fit</h3><p>Watch how we install a new toilet step by step. Clean removal, perfect seal and tested before we leave. No leaks.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20toilet%20installation" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Toilet on WhatsApp</a></div></div></div>
+<div class="section"><h2>🎥 Watch Picture Frames Installation</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="picture-frames.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Hanging Picture Frames - Straight, Level & Beautiful</h3><p>Watch how we hang picture frames step by step. Straight, level and perfectly spaced. No crooked frames, no damage to your walls.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20picture%20frames%20installed" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Picture Frames on WhatsApp</a></div></div></div>
+<div class="section"><h2>🎥 Watch Tiling Installation</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="tiling.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Installing Tiles - Straight, Strong & Perfect Finish</h3><p>Watch how we install tiles step by step. Straight lines, strong adhesive and perfect grout. Clean, neat and long lasting.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20tiling" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Tiling on WhatsApp</a></div></div></div>
+<div class="section"><h2>🎥 Watch Carpet Cleaning</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="carpet-cleaning.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Carpet Cleaning - Deep Clean, Fresh & Like New</h3><p>Watch how we clean carpets step by step. Deep clean, remove stains and dirt, fresh smell and fast drying. Your carpet will look like new again.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20carpet%20cleaning" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Carpet Cleaning on WhatsApp</a></div></div></div>
+<div class="section"><h2>🎥 Watch Drain Cleaning</h2><div class="video-box"><video class="video-embed" controls playsinline preload="metadata"><source src="drain-cleaning.mp4" type="video/mp4">Your browser does not support video.</video><div class="video-caption"><h3>Drain Cleaning - Unblock, Clean & Free Flowing</h3><p>Watch how we clean and unblock drains step by step. Remove blockage, flush clean and test water flow. No more bad smell, no more flooding.</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20drain%20cleaning" style="display:inline-block;background:#25D366;color:#fff;padding:11px 20px;border-radius:30px;margin-top:10px;text-decoration:none;font-weight:bold;font-size:14px">Book Drain Cleaning on WhatsApp</a></div></div></div>
+<div class="section" id="allJobsSection"><div class="alljobs-folder"><div style="font-size:40px">📂</div><h2>ALL JOBS FOLDER</h2><p>Want to see EVERYTHING? This folder is alone here below the videos.<br>Tap to OPEN it and see all jobs. Cleaning jobs have no prices - Free Quote. Tap View to see details.</p><button class="alljobs-btn" onclick="toggleAllJobs()" id="allJobsBtn">📂 Open All Jobs Folder</button></div><div class="alljobs-content" id="allJobsContent"><h2>📂 All Jobs</h2><div id="allJobsList"></div><button class="close-btn" onclick="toggleAllJobs()">✕ Close All Jobs Folder</button></div></div>
+<div class="section"><h2 id="resultsTitle">Popular Services</h2><p style="font-size:14px;color:#555;margin-bottom:12px">One folder per service. Tap a folder to open it - all related jobs are inside that one folder. For example, Plumbing is ONE folder with all Plumbing jobs inside. Tap View to see everything before you Book.</p><div class="listings" id="listings"></div></div>
+<div class="contact"><h2>VICTOR HANDYMAN</h2><p style="margin-top:10px;line-height:1.7">📍 69 Parklands Main Rd, Parklands, Cape Town, 7441<br>📞 <a href="tel:+27646000005">+27 (0)64 60 00 005</a> | 🕐 Mon - Sat: 07:00 - 18:00<br>📍 Parklands, Table View, Dunoon, Slovo Park, Killarney Gardens, Richwood, Sunningdale, Bloubergstrand, Milnerton, Century City, Flamingo Vlei, Blouberg Rise, West Beach, Big Bay, Marconi Beam / Montague Gardens, Brooklyn, Ysterplaat, Edgemead, Bothasig, Burgundy Estate, Parow, Goodwood, Rugby, Maitland, Melkbosstrand, Durbanville, Cape Town CBD, Sea Point, Bellville, Brackenfell, Kraaifontein, Atlantis, Delft, Langa, Nyanga, Khayelitsha, Stellenbosch, Observatory, Woodstock, Salt River, Pinelands, Rondebosch, Claremont, Wynberg, Kenilworth, Plumstead, Constantia, Tokai, Hout Bay, Muizenberg, Fish Hoek, Grassy Park, Mitchells Plain, Gugulethu, Philippi, Epping</p><a href="https://wa.me/27646000005?text=Hi%20Victor%2C%20I%20want%20a%20quote" style="display:inline-block;background:#25D366;color:#fff;padding:13px 20px;border-radius:30px;margin-top:14px;text-decoration:none">Get Free Quote on WhatsApp</a></div>
+<footer>© 2026 VICTOR HANDYMAN | Parklands, Cape Town | +27 (0)64 60 00 005</footer>
+<div class="view-popup" id="viewPopup" onclick="if(event.target===this) closeView()"><div class="view-box"><span class="welcome-close" onclick="closeView()">✕</span><img id="viewImg" src=""><div class="view-body"><h2 id="viewTitle"></h2><p id="viewDesc"></p><div class="view-meta" id="viewMeta"></div><div class="view-actions"><a id="viewBookBtn" class="view-book" href="#" target="_blank">💬 Book on WhatsApp</a><button class="view-close" onclick="closeView()">Close</button></div></div></div></div>
+<script>
+function closeWelcome(){ document.getElementById('welcomePopup').style.display='none'; }
+setTimeout(closeWelcome, 12000);
+let selectedArea = "Parklands";
+let currentCat = "";
+let currentView = null;
+const services = [
+  // ===== PLUMBING - 31 JOBS =====
+  {name:"Plumbing - Fix Leak", cat:"Plumbing", price:"R250", note:"Per / 1 Job", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Pipe leaking, water dripping, wall wet - we fix the leak.", detail:"What we do: Find the leak, stop the water, fix or replace the leaking pipe, test for leaks. What you get: No more dripping, no more wet wall. Time: 1-2 hours. Guarantee: We test before we leave."},
+  {name:"Plumbing - Fix Tap", cat:"Plumbing", price:"R250", note:"Per / 1 Tap", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Tap dripping, tap leaking, tap stiff - we fix tap.", detail:"What we do: Check tap, replace washer / cartridge, fix drip. What you get: Tap stops dripping, works smooth. Time: 30-60 mins."},
+  {name:"Plumbing - Fix Toilet", cat:"Plumbing", price:"R250", note:"Per / 1 Toilet", img:"https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80", desc:"Toilet leaking, toilet running, toilet not working - we fix toilet.", detail:"What we do: Check toilet, fix leak, fix running water. What you get: Toilet works normal, no leak. Time: 1 hour. We test flush before we leave."},
+  {name:"Plumbing - Install New Tap", cat:"Plumbing", price:"R350", note:"Per / 1 Tap", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new tap only - kitchen, bathroom, outside tap.", detail:"What we do: Remove old tap, fit new tap, seal, test no leaks. Labour only, tap not included. Time: 45 mins."},
+  {name:"Plumbing - Install New Toilet", cat:"Plumbing", price:"R350", note:"Per / 1 Toilet", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new toilet only - remove old, fit new, seal, test no leaks.", detail:"What we do: Remove old toilet, fit new toilet, new seal, connect water, test flush 3 times. Labour only, toilet not included. Time: 1-2 hours."},
+  {name:"Drain Cleaning - Unblock", cat:"Plumbing", price:"R250", note:"Per / 1 Drain", img:"https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80", desc:"Unblock drains, remove blockage, flush clean.", detail:"What we do: Remove blockage, flush drain, test water flow. What you get: Water flows fast, no bad smell. Time: 1 hour."},
+  {name:"Plumbing - Unblock Toilet", cat:"Plumbing", price:"R250", note:"Per / 1 Toilet", img:"https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80", desc:"Toilet blocked, not flushing, water rising - we unblock fast.", detail:"What we do: Unblock toilet, flush and test. What you get: Toilet flushes normal. Time: 30-60 mins. No mess, we clean after."},
+  {name:"Plumbing - Fix Burst Pipe", cat:"Plumbing", price:"R400", note:"Per / 1 Pipe", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Burst pipe, water flooding, emergency repair.", detail:"What we do: Close water, cut burst part, join new pipe, test. Emergency: Call us fast. Time: 1-2 hours."},
+  {name:"Plumbing - Install New Basin", cat:"Plumbing", price:"R350", note:"Per / 1 Basin", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"New basin, mixer, waste and trap installation.", detail:"What we do: Fit basin, mixer, waste, trap, connect water, test. Labour only, basin not included. Time: 1-2 hours."},
+  {name:"Plumbing - Install New Shower", cat:"Plumbing", price:"R400", note:"Per / 1 Shower", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new shower - mixer, arm and tray.", detail:"What we do: Fit shower mixer, arm, tray, seal, test. Labour only, shower not included. Time: 1-2 hours."},
+  {name:"Plumbing - Install New Shower Head", cat:"Plumbing", price:"R250", note:"Per / 1 Shower Head", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new shower head only - replace old shower head.", detail:"What we do: Remove old shower head, fit new one, test water. Time: 30 mins. Shower head not included."},
+  {name:"Plumbing - Replace Toilet Cistern", cat:"Plumbing", price:"R300", note:"Per / 1 Toilet", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Toilet cistern leaking, cracked - replace cistern.", detail:"What we do: Remove old cistern, fit new cistern, connect water, test flush. Labour only, cistern not included. Time: 1 hour."},
+  {name:"Plumbing - Fix Toilet Flush", cat:"Plumbing", price:"R300", note:"Per / 1 Toilet", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Toilet not flushing, toilet running - fix flush mechanism.", detail:"What we do: Replace flush mechanism / float, test flush. What you get: Toilet flushes strong, stops running. Time: 1 hour."},
+  {name:"Plumbing - Install Geyser", cat:"Plumbing", price:"R850", note:"Labour Only", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Install new geyser, connect pipes, test. Geyser not included.", detail:"What we do: Mount geyser, connect hot and cold pipes, connect overflow, test. Labour only, geyser not included. Time: 2-3 hours."},
+  {name:"Plumbing - Fix Low Water Pressure", cat:"Plumbing", price:"R300", note:"Per / 1 Job", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Low pressure in taps, shower weak - check and fix.", detail:"What we do: Check pipes, valves, filter, fix blockage. What you get: Strong water pressure. Time: 1 hour."},
+  {name:"Plumbing - Install Water Tank", cat:"Plumbing", price:"R900", note:"Labour Only", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Install water tank, connect pipes, overflow and tap.", detail:"What we do: Place tank, connect pipes, overflow, tap, test. Labour only, tank not included. Time: 2-3 hours."},
+  {name:"Plumbing - Install JoJo Tank", cat:"Plumbing", price:"R900", note:"Labour Only", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Install JoJo tank, connect pipes, overflow and tap.", detail:"What we do: Place JoJo tank, connect pipes, overflow, tap, test. Labour only, tank not included. Time: 2-3 hours."},
+  {name:"Plumbing - Fix Stopcock", cat:"Plumbing", price:"R300", note:"Per / 1 Stopcock", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Stopcock leaking, stuck, cannot close water - fix stopcock.", detail:"What we do: Fix or replace stopcock, test closing water. Time: 1 hour. Stopcock not included."},
+  {name:"Plumbing - Fix Valve", cat:"Plumbing", price:"R300", note:"Per / 1 Valve", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Valve leaking, stuck - fix or replace valve.", detail:"What we do: Fix or replace valve, test no leak. Time: 1 hour. Valve not included."},
+  {name:"Plumbing - Install Washing Machine Connection", cat:"Plumbing", price:"R350", note:"Per / 1 Machine", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Connect washing machine / dishwasher, water in + waste out.", detail:"What we do: Connect water in, waste out, test no leak, test machine fill. Time: 45 mins. Pipes not included."},
+  {name:"Plumbing - Leak Detection", cat:"Plumbing", price:"R350", note:"Per / Visit", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Hidden leak, damp wall, high water bill - find the leak.", detail:"What we do: Check walls, floor, pipes, find hidden leak, show you where it is. Time: 1 hour. Repair is separate price."},
+  {name:"Plumbing - Replace Pipes / Repiping", cat:"Plumbing", price:"R450", note:"Per / Job From", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Old rusty pipes, replace with new pipes - house repiping.", detail:"What we do: Remove old pipes, fit new pipes, test all taps. Free quote after viewing. Time: Depends on house."},
+  {name:"Plumbing - Install Outside Tap", cat:"Plumbing", price:"R300", note:"Per / 1 Tap", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"New outside tap for garden, yard, car wash.", detail:"What we do: Run pipe, fit outside tap, test no leak. Time: 1 hour. Tap not included."},
+  {name:"Plumbing - Fix Water Meter Leak", cat:"Plumbing", price:"R350", note:"Per / 1 Job", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Water meter leaking, water running, high bill.", detail:"What we do: Fix leak at meter, replace coupling, test. Time: 1 hour."},
+  {name:"Plumbing - Install Bath / Bathtub", cat:"Plumbing", price:"R600", note:"Labour Only", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new bath, connect waste, seal, test.", detail:"What we do: Fit bath, connect waste and overflow, seal, test no leak. Labour only. Time: 2 hours."},
+  {name:"Plumbing - Fix Bath Leak / Waste", cat:"Plumbing", price:"R350", note:"Per / 1 Bath", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Bath leaking underneath, waste blocked.", detail:"What we do: Fix bath waste, seal, test. Time: 1 hour."},
+  {name:"Plumbing - Install Kitchen Sink", cat:"Plumbing", price:"R400", note:"Per / 1 Sink", img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80", desc:"Install new kitchen sink, mixer, waste, trap.", detail:"What we do: Fit sink, mixer, waste, trap, test no leak. Labour only. Time: 1-2 hours."},
+  {name:"Plumbing - Unblock Kitchen Sink", cat:"Plumbing", price:"R250", note:"Per / 1 Sink", img:"https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80", desc:"Kitchen sink blocked, water not going down.", detail:"What we do: Unblock sink, clean trap, flush, test flow. Time: 45 mins."},
+  {name:"Plumbing - Install Hose Bib / Garden Pipe", cat:"Plumbing", price:"R300", note:"Per / 1 Job", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Garden hose point, pipe for garden.", detail:"What we do: Fit hose bib, connect pipe, test. Time: 1 hour."},
+  {name:"Plumbing - Fix Geyser Leak / Element", cat:"Plumbing", price:"R450", note:"Per / 1 Geyser", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Geyser leaking, no hot water, element problem.", detail:"What we do: Check geyser, fix leak, replace element / thermostat if needed. Parts not included. Time: 1-2 hours."},
+  {name:"Plumbing - Emergency Plumbing Call-Out", cat:"Plumbing", price:"R400", note:"Emergency", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80", desc:"Emergency - burst pipe, flooding, toilet overflowing.", detail:"What we do: Come fast, stop water, fix emergency. Call now. Time: Same day if possible."},
+
+  // ===== PAINTING - 10 JOBS =====
+  {name:"Painting - 1 Room", cat:"Painting", price:"R850", note:"Per / Room", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Interior painting, clean finish.", detail:"What we do: Cover floor and furniture, fill small holes, 2 coats paint, clean after. Labour only, paint not included unless agreed. Time: 1 day."},
+  {name:"Painting - Full House", cat:"Painting", price:"R4,500", note:"Per House", img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80", desc:"Full house interior + exterior.", detail:"What we do: Paint full house inside and outside, 2 coats, fill cracks. Labour only, paint not included. Time: 2-4 days. Free quote after viewing house."},
+  {name:"Painting - Exterior Walls Only", cat:"Painting", price:"R2,500", note:"From", img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80", desc:"Paint outside walls, clean and fresh.", detail:"What we do: Wash walls, fill cracks, 2 coats exterior paint. Labour only. Time: 1-3 days."},
+  {name:"Painting - Interior Walls Only", cat:"Painting", price:"R1,800", note:"From", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Paint inside walls only.", detail:"What we do: Fill holes, 2 coats interior paint, clean finish. Labour only. Time: 1-2 days."},
+  {name:"Painting - Roof Painting", cat:"Painting", price:"R1,500", note:"From", img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80", desc:"Paint roof, seal, waterproof.", detail:"What we do: Clean roof, seal, paint roof. Labour only. Time: 1-2 days."},
+  {name:"Painting - Gate & Fence Painting", cat:"Painting", price:"R600", note:"From", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Paint gate, fence, burglar bars.", detail:"What we do: Sand, prime, paint gate and fence. Labour only. Time: 1 day."},
+  {name:"Painting - Ceiling Painting", cat:"Painting", price:"R500", note:"Per / Room", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Paint ceiling white, clean, no marks.", detail:"What we do: Cover furniture, 2 coats ceiling paint. Labour only. Time: Half day per room."},
+  {name:"Painting - Bedroom Painting", cat:"Painting", price:"R850", note:"Per / Room", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Paint bedroom, any colour.", detail:"What we do: Fill holes, 2 coats, clean. Labour only. Time: 1 day."},
+  {name:"Painting - Bathroom / Kitchen Painting", cat:"Painting", price:"R750", note:"Per / Room", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80", desc:"Paint bathroom or kitchen, waterproof paint.", detail:"What we do: Use waterproof paint, 2 coats. Labour only. Time: 1 day."},
+  {name:"Painting - Damp Proof / Waterproof Painting", cat:"Painting", price:"R1,200", note:"From", img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80", desc:"Fix damp wall, waterproof paint.", detail:"What we do: Treat damp, waterproof, paint. Labour only. Time: 1-2 days."},
+
+  // ===== PAVING - 14 JOBS =====
+  {name:"Paving - Driveway Paving", cat:"Paving", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Driveway paving - strong, flat, for cars. Solid base.", detail:"What we do: Dig, solid base, sand, lay paving, compact, fill joints. What you get: Strong flat driveway for cars. Price per m², labour + paving not included unless agreed."},
+  {name:"Paving - Yard / Backyard Paving", cat:"Paving", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Yard and backyard paving - clean, no mud, easy to wash.", detail:"What we do: Prepare base, lay paving, compact. What you get: Clean yard, no mud. Price per m² from."},
+  {name:"Paving - Walkway / Pathway Paving", cat:"Paving", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Walkway and pathway - from gate to door, straight and safe.", detail:"What we do: Lay straight walkway from gate to door. Safe, flat, no tripping. Price per m² from."},
+  {name:"Paving - Patio Paving", cat:"Paving", price:"R200", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Patio paving - beautiful place to sit, braai and relax.", detail:"What we do: Lay patio paving, neat pattern, flat. What you get: Beautiful patio for braai. Price per m² from."},
+  {name:"Paving - Pool Surround Paving", cat:"Paving", price:"R220", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Around the pool - non-slip, safe, beautiful finish.", detail:"What we do: Lay non-slip paving around pool, safe for kids. Price per m² from."},
+  {name:"Paving - Parking Area Paving", cat:"Paving", price:"R190", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Parking area paving - strong for cars, flat and neat.", detail:"What we do: Strong base, lay paving for cars. Price per m² from."},
+  {name:"Paving - Garden Paving / Stepping Stones", cat:"Paving", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Garden paving, stepping stones - walk in garden without mud.", detail:"What we do: Lay garden paving / stepping stones. Walk without mud. Price per m² from."},
+  {name:"Paving - Interlocking Paving", cat:"Paving", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Interlocking paving - popular, strong, many colours and patterns.", detail:"What we do: Lay interlocking paving, many colours. Strong, neat. Price per m² from."},
+  {name:"Paving - Brick Paving", cat:"Paving", price:"R200", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Brick paving - classic red brick look, strong and beautiful.", detail:"What we do: Lay brick paving, classic look. Price per m² from."},
+  {name:"Paving - Concrete / Cement Paving", cat:"Paving", price:"R170", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Concrete / cement paving - affordable, strong and flat.", detail:"What we do: Lay concrete paving, affordable, strong. Price per m² from."},
+  {name:"Paving - Natural Stone Paving", cat:"Paving", price:"R280", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Natural stone paving - expensive look, very strong and beautiful.", detail:"What we do: Lay natural stone, beautiful finish. Price per m² from."},
+  {name:"Paving - Cobble Paving", cat:"Paving", price:"R250", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Cobble paving - round stones, old style, beautiful for driveway.", detail:"What we do: Lay cobble paving, old style. Price per m² from."},
+  {name:"Paving - Repair Paving", cat:"Paving", price:"R150", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Fix sunken, broken, loose paving - lift, re-level and re-lay.", detail:"What we do: Lift broken paving, re-level base, re-lay, compact. What you get: Flat paving again. Price per m² from."},
+  {name:"Paving - Cleaning & Sealing", cat:"Paving", price:"R80", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Clean paving, remove dirt and moss, seal to stay new longer.", detail:"What we do: Wash paving, remove moss, seal. What you get: Paving looks new, stays clean longer. Price per m² from."},
+
+  // ===== TILING - 10 JOBS =====
+  {name:"Tiling - Bathroom / Kitchen", cat:"Tiling", price:"R220", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Floor & wall tiling.", detail:"What we do: Lay tiles straight, strong adhesive, perfect grout, clean. Labour only, tiles not included. Time: Depends on m²."},
+  {name:"Tiling - Floor Tiling", cat:"Tiling", price:"R220", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Floor tiles - living room, bedroom, passage.", detail:"What we do: Lay floor tiles straight, level, grout, clean. Labour only. Time: Depends on m²."},
+  {name:"Tiling - Wall Tiling", cat:"Tiling", price:"R240", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Wall tiles - bathroom, kitchen splashback.", detail:"What we do: Lay wall tiles straight, grout, clean. Labour only. Time: Depends on m²."},
+  {name:"Tiling - Shower Tiling", cat:"Tiling", price:"R250", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Shower tiles, waterproof, no leak.", detail:"What we do: Waterproof, lay shower tiles, grout, seal. Labour only. Time: 1-2 days."},
+  {name:"Tiling - Kitchen Splashback", cat:"Tiling", price:"R250", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Kitchen splashback tiles - beautiful and easy to clean.", detail:"What we do: Lay splashback tiles, grout, clean. Labour only. Time: 1 day."},
+  {name:"Tiling - Remove Old Tiles", cat:"Tiling", price:"R80", note:"Per m² Extra", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Remove old tiles carefully, clean, ready for new tiles.", detail:"What we do: Remove old tiles, clean floor/wall, remove rubbish. Time: Depends on m²."},
+  {name:"Tiling - Re-Grouting / Fix Loose Tiles", cat:"Tiling", price:"R120", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Fix loose tiles, cracked grout, re-grout.", detail:"What we do: Remove loose tiles, re-fix, re-grout, clean. Time: 1 day."},
+  {name:"Tiling - Pool Tiling", cat:"Tiling", price:"R300", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Pool tiles, waterproof, beautiful.", detail:"What we do: Lay pool tiles, waterproof grout. Labour only. Time: Depends on pool."},
+  {name:"Tiling - Outdoor / Patio Tiling", cat:"Tiling", price:"R230", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Outdoor tiles, patio, non-slip.", detail:"What we do: Lay outdoor non-slip tiles, grout. Labour only. Time: Depends on m²."},
+  {name:"Tiling - Skirting / Border Tiling", cat:"Tiling", price:"R150", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Skirting tiles, border, finishing.", detail:"What we do: Fit skirting and border tiles, neat finish. Labour only. Time: Half day."},
+
+  // ===== ELECTRICITY - 14 JOBS =====
+  {name:"Electricity - Plug / Light / Switch", cat:"Electricity", price:"R300", note:"Per / 1 Point", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"Plugs, lights, switches.", detail:"What we do: Install or fix 1 plug, 1 light OR 1 switch. Safe wiring, test before we leave. Time: 45 mins per point. Material not included."},
+  {name:"Electricity - Full House Check", cat:"Electricity", price:"R600", note:"Per", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Check DB board, plugs and lights.", detail:"What we do: Check DB board, all plugs, lights, switches, find faults. Report what needs fixing. Time: 1-2 hours."},
+  {name:"Electricity - Install New Plug", cat:"Electricity", price:"R300", note:"Per / 1 Plug", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"New plug point, double plug, outside plug.", detail:"What we do: Wire new plug, fit, test. Material not included. Time: 45 mins."},
+  {name:"Electricity - Install New Light", cat:"Electricity", price:"R300", note:"Per / 1 Light", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"New light, ceiling light, outside light.", detail:"What we do: Wire and fit new light, test. Material not included. Time: 45 mins."},
+  {name:"Electricity - Install New Switch", cat:"Electricity", price:"R250", note:"Per / 1 Switch", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"New switch, double switch, dimmer.", detail:"What we do: Wire and fit switch, test. Time: 30 mins."},
+  {name:"Electricity - Fix Tripping Power", cat:"Electricity", price:"R400", note:"Per / Job", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Power tripping, DB tripping, no power.", detail:"What we do: Find fault causing tripping, fix, test. Time: 1 hour."},
+  {name:"Electricity - DB Board Repair / Replace", cat:"Electricity", price:"R600", note:"From", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"DB board broken, breaker faulty, replace breaker.", detail:"What we do: Check DB, replace breaker, test. Breaker not included. Time: 1 hour."},
+  {name:"Electricity - Install Ceiling Fan", cat:"Electricity", price:"R400", note:"Per / 1 Fan", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"Install ceiling fan, strong, no wobble.", detail:"What we do: Fit fan, wire, test speed. Fan not included. Time: 1 hour."},
+  {name:"Electricity - Install Geyser Wiring / Timer", cat:"Electricity", price:"R500", note:"Per / 1 Geyser", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Wire geyser, install timer, save electricity.", detail:"What we do: Wire geyser, fit timer, test. Timer not included. Time: 1 hour."},
+  {name:"Electricity - Install Outside / Security Light", cat:"Electricity", price:"R350", note:"Per / 1 Light", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80", desc:"Outside light, security light, floodlight.", detail:"What we do: Fit outside light, wire, test. Light not included. Time: 45 mins."},
+  {name:"Electricity - Install Stove / Oven Wiring", cat:"Electricity", price:"R500", note:"Per / 1 Stove", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Wire stove, oven, plug for stove.", detail:"What we do: Wire stove, test. Time: 1 hour."},
+  {name:"Electricity - Install CCTV / Camera", cat:"Electricity", price:"R600", note:"Per / Camera", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Install CCTV camera, wire, test.", detail:"What we do: Mount camera, wire, test picture. Camera not included. Time: 1 hour per camera."},
+  {name:"Electricity - Install Intercom / Gate Motor Wiring", cat:"Electricity", price:"R600", note:"From", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"Intercom, gate motor wiring.", detail:"What we do: Wire intercom / gate motor, test. Parts not included. Time: 1-2 hours."},
+  {name:"Electricity - Fix Faulty Wiring / No Power", cat:"Electricity", price:"R400", note:"Per / Job", img:"https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80", desc:"No power in room, faulty wiring, burning smell.", detail:"What we do: Find faulty wiring, fix, test safe. Time: 1 hour."},
+
+  // ===== CEILING - 8 JOBS =====
+  {name:"Ceiling - Install New Ceiling", cat:"Ceiling", price:"R200", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80", desc:"New ceiling, boards & cornices.", detail:"What we do: Fit frame, boards, cornices, skim, neat finish. Labour only, boards not included. Time: Depends on size."},
+  {name:"Ceiling - Repair / Replace Boards", cat:"Ceiling", price:"R150", note:"Per m² From", img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80", desc:"Fix sagging, water damage, replace boards.", detail:"What we do: Remove damaged boards, fit new boards, skim, paint ready. Labour only. Time: Depends on damage."},
+  {name:"Ceiling - PVC Ceiling Install", cat:"Ceiling", price:"R220", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80", desc:"PVC ceiling, waterproof, easy to clean.", detail:"What we do: Fit PVC ceiling, cornices, neat finish. Labour only. Time: Depends on size."},
+  {name:"Ceiling - Rhino Board Ceiling", cat:"Ceiling", price:"R200", note:"Per m² From", img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80", desc:"Rhino board ceiling, smooth, paint ready.", detail:"What we do: Fit rhino boards, skim, paint ready. Labour only. Time: Depends on size."},
+  {name:"Ceiling - Cornices Install / Repair", cat:"Ceiling", price:"R120", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80", desc:"Install or fix cornices, neat corners.", detail:"What we do: Fit cornices, fill, smooth. Labour only. Time: 1 day."},
+  {name:"Ceiling - Fix Sagging Ceiling", cat:"Ceiling", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80", desc:"Ceiling sagging, falling - fix frame and boards.", detail:"What we do: Fix frame, replace boards, skim. Labour only. Time: 1-2 days."},
+  {name:"Ceiling - Fix Water Damaged Ceiling", cat:"Ceiling", price:"R180", note:"Per m² From", img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80", desc:"Water damage from roof leak - replace boards.", detail:"What we do: Remove wet boards, dry, fit new boards, skim. Labour only. Fix roof leak first."},
+  {name:"Ceiling - Bulkhead / Drop Ceiling", cat:"Ceiling", price:"R250", note:"Per m² From", img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80", desc:"Bulkhead, drop ceiling, modern look.", detail:"What we do: Build bulkhead / drop ceiling, boards, skim. Labour only. Time: Depends on size."},
+
+    // ===== DEEP CLEAN - 14 JOBS =====
+  {name:"Deep Clean and General Cleaning", cat:"Deep Clean and General Cleaning", price:"R800", note:"From / House", img:"https://images.unsplash.com/photo-1603712725038-e9334ae8f39f?auto=format&fit=crop&w=800&q=80", desc:"Deep clean and general cleaning, remove stains, dirt and bad smell.", detail:"What we do: Clean all rooms, floors, walls, surfaces. Remove stains, dirt, bad smell. Price from R800 - depends on house size. Send photos on WhatsApp for exact quote. Time: Depends on house size."},
+  {name:"Carpet Cleaning", cat:"Deep Clean and General Cleaning", price:"R250", note:"From / Room", img:"https://images.unsplash.com/photo-1603712725038-e9334ae8f39f?auto=format&fit=crop&w=800&q=80", desc:"Deep clean carpets, remove stains, dirt and bad smell. Fresh and like new.", detail:"What we do: Vacuum, deep wash carpet, remove stains, deodorise, fast drying. Price R250 per room / carpet from. What you get: Carpet like new, fresh smell."},
+  {name:"Sofa / Couch Cleaning", cat:"Deep Clean and General Cleaning", price:"R450", note:"From / 2-Seater", img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80", desc:"Clean sofa, couch, chairs - remove stains, dirt and smell.", detail:"What we do: Deep clean sofa / couch, remove stains, dirt, smell. Price R450 for 2-Seater, R600 for 3-Seater. Send photo for exact quote. Time: 1-2 hours."},
+  {name:"Mattress Cleaning", cat:"Deep Clean and General Cleaning", price:"R300", note:"From / Single", img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80", desc:"Deep clean mattress, remove stains, dust and bad smell.", detail:"What we do: Vacuum, deep clean mattress, remove stains, dust, smell. Price R300 Single, R450 Double / Queen. Time: 1 hour per mattress."},
+  {name:"Curtain Cleaning", cat:"Deep Clean and General Cleaning", price:"R150", note:"Per / Window", img:"https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80", desc:"Clean curtains, remove dust and dirt. Fresh and neat.", detail:"What we do: Clean curtains, remove dust, dirt. Price R150 per window. Time: Depends on number of curtains."},
+  {name:"Window Cleaning", cat:"Deep Clean and General Cleaning", price:"R100", note:"Per / Window", img:"https://images.unsplash.com/photo-1603712725038-e9334ae8f39f?auto=format&fit=crop&w=800&q=80", desc:"Clean windows inside and outside, clear and shining.", detail:"What we do: Clean windows inside and outside, frames and glass. Price R100 per window. What you get: Clear shining windows."},
+  {name:"Kitchen Deep Clean", cat:"Deep Clean and General Cleaning", price:"R650", note:"From / Kitchen", img:"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=800&q=80", desc:"Deep clean kitchen, stove, cupboards, tiles and floor.", detail:"What we do: Clean stove, cupboards, tiles, floor, sink. Remove grease. Price from R650. Time: 2-3 hours."},
+  {name:"Bathroom Deep Clean", cat:"Deep Clean and General Cleaning", price:"R450", note:"From / Bathroom", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Deep clean bathroom, toilet, bath, shower, tiles and floor.", detail:"What we do: Clean toilet, bath, shower, tiles, floor, mirror. Remove stains and smell. Price from R450. Time: 1-2 hours."},
+  {name:"House Deep Clean - Full House", cat:"Deep Clean and General Cleaning", price:"R1,800", note:"From / House", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Full house deep clean - all rooms, kitchen and bathrooms.", detail:"What we do: Deep clean full house - all rooms, kitchen, bathrooms. Price from R1,800 - depends on house size. Send photos for exact quote. Time: Full day."},
+  {name:"After Renovation Cleaning", cat:"Deep Clean and General Cleaning", price:"R1,500", note:"From / House", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Clean after building / renovation - dust, paint, cement and rubbish.", detail:"What we do: Remove dust, paint, cement, rubbish after building. Price from R1,500. Time: Depends on house."},
+  {name:"Move In / Move Out Cleaning", cat:"Deep Clean and General Cleaning", price:"R1,200", note:"From / House", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Clean house before you move in or after you move out.", detail:"What we do: Clean empty house before move in or after move out. Price from R1,200. Time: Depends on house."},
+  {name:"Office Cleaning", cat:"Deep Clean and General Cleaning", price:"R900", note:"From / Office", img:"https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80", desc:"Clean office, desks, floors, windows and toilets.", detail:"What we do: Clean office, desks, floors, windows, toilets. Price from R900. Weekly or once-off."},
+  {name:"Floor Cleaning & Polishing", cat:"Deep Clean and General Cleaning", price:"R80", note:"Per m² From", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Clean and polish floors - tiles, wood, concrete. Shining finish.", detail:"What we do: Clean and polish floors - tiles, wood, concrete. Shining finish. Price R80 per m² from. Time: Depends on size."},
+  {name:"Upholstery / Chair Cleaning", cat:"Deep Clean and General Cleaning", price:"R250", note:"Per / Chair", img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80", desc:"Clean chairs, dining chairs, office chairs.", detail:"What we do: Deep clean chairs, remove stains. Price R250 per chair. Time: Depends on number."},
+  // ===== GENERAL SERVICE - 18 JOBS =====
+  {name:"General Repairs - Call-Out", cat:"General Service", price:"R200", note:"Call-out", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Door, lock, curtain rail, shelf. General small jobs in Cape Town.", detail:"What we do: Come to you, check small job, fix on spot if possible. Call-out R200, repair price quoted on site. Time: 1 hour."},
+  {name:"Picture Frames - Hanging", cat:"General Service", price:"R200", note:"Call-out", img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80", desc:"Straight, level and perfectly spaced picture frames.", detail:"What we do: Hang frames straight, level, perfectly spaced. No crooked frames, no damage to walls. Time: 30-60 mins."},
+  {name:"TV Mounting - Wall Mount", cat:"General Service", price:"R350", note:"Per / 1 TV", img:"https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=800&q=80", desc:"Mount TV on wall, straight, strong bracket, hide cables.", detail:"What we do: Fit strong bracket, mount TV straight, level, hide cables. Bracket not included unless agreed. Time: 1 hour. Guarantee: TV will not fall."},
+  {name:"Door Repair / Hinges / Handle", cat:"General Service", price:"R300", note:"Per / 1 Door", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Door not closing, squeaking, handle loose - fix hinges, handle, lock.", detail:"What we do: Fix door, hinges, handle. Door closes smooth, no squeak. Time: 1 hour. Hinges / handle not included."},
+  {name:"Lock Change / Lock Repair", cat:"General Service", price:"R300", note:"Per / 1 Lock", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Change lock, lost keys, lock stuck, new lock for door / gate.", detail:"What we do: Change lock or fix stuck lock. New keys included with new lock. Time: 45 mins. Lock not included unless agreed."},
+  {name:"Burglar Bars - Install / Repair", cat:"General Service", price:"R450", note:"Per / Window", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Install burglar bars, fix loose bars, secure windows - Cape Town safety.", detail:"What we do: Install or fix burglar bars, secure windows. Labour only, bars not included. Time: 1 hour per window."},
+  {name:"Gate Repair - Sliding / Swing Gate", cat:"General Service", price:"R400", note:"Per / 1 Gate", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Gate stuck, wheel broken, hinge broken, motor gate not closing.", detail:"What we do: Fix sliding or swing gate - wheel, hinge, track. Gate moves smooth. Time: 1-2 hours. Parts not included."},
+  {name:"Curtain Rail / Blinds Install", cat:"General Service", price:"R300", note:"Per / 1 Rail", img:"https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80", desc:"Install curtain rail, blinds, curtain rod - straight and strong.", detail:"What we do: Install curtain rail, blinds or rod straight and strong. Time: 45 mins per rail. Rail not included."},
+  {name:"Shelf / Cupboard Repair", cat:"General Service", price:"R300", note:"Per / 1 Job", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Shelf falling, cupboard door loose, hinge broken - fix and re-fit.", detail:"What we do: Fix shelf / cupboard, re-fit, tighten hinges. Time: 1 hour. Hinges not included."},
+  {name:"Roof Leak Repair", cat:"General Service", price:"R500", note:"Per / 1 Leak", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Roof leaking in Cape Town winter rain - find leak, seal and fix.", detail:"What we do: Find roof leak, seal, fix. Test with water. Time: 1-2 hours. Guarantee: No leak after fix."},
+  {name:"Gutter Cleaning / Repair", cat:"General Service", price:"R350", note:"Per / House", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", desc:"Gutter blocked, overflowing, leaking - clean and fix gutters.", detail:"What we do: Clean gutters, remove leaves, fix leak, test water flow. Time: 1-2 hours."},
+  {name:"Fence Repair - Wood / Wire / Palisade", cat:"General Service", price:"R400", note:"Per / Job", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Fence broken, falling, hole - repair wood, wire or palisade fence.", detail:"What we do: Fix wood, wire or palisade fence - broken part, hole. Time: 1-2 hours. Material not included."},
+  {name:"Wardrobe / Cupboard Install", cat:"General Service", price:"R600", note:"Labour Only", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Build / install wardrobe, cupboard, assemble flat-pack furniture.", detail:"What we do: Build / install wardrobe / cupboard, assemble flat-pack. Labour only. Time: 2-3 hours. Guarantee: Strong, level."},
+  {name:"Kitchen Cupboard Repair", cat:"General Service", price:"R400", note:"Per / Job", img:"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=800&q=80", desc:"Kitchen cupboard door, hinge, handle, drawer not closing - fix.", detail:"What we do: Fix kitchen cupboard door, hinge, handle, drawer. Closes smooth. Time: 1 hour. Hinges not included."},
+  {name:"Bathroom Accessories Install", cat:"General Service", price:"R300", note:"Per / Job", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Install towel rail, mirror, toilet paper holder, shower shelf.", detail:"What we do: Install towel rail, mirror, toilet paper holder, shower shelf - straight, strong. Time: 45 mins. Accessories not included."},
+  {name:"JoJo Tank Stand / General Welding Repair", cat:"General Service", price:"R450", note:"Per / Job", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"JoJo tank stand, small welding, metal gate, metal frame repair.", detail:"What we do: Fix JoJo tank stand, small welding, metal gate / frame. Time: 1-2 hours. Material not included."},
+  {name:"Flat-Pack Furniture Assembly", cat:"General Service", price:"R350", note:"Per / Item", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80", desc:"Assemble bed, table, desk, wardrobe - flat-pack.", detail:"What we do: Assemble flat-pack furniture, strong, level. Time: 1-2 hours per item."},
+  {name:"Mirror / Glass Install", cat:"General Service", price:"R350", note:"Per / Job", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", desc:"Install mirror, glass shelf, shower glass.", detail:"What we do: Install mirror / glass, straight, strong, safe. Time: 45 mins. Mirror not included."},
+];
+const folders = [
+  {cat:"Plumbing", emoji:"🔧", img:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Painting", emoji:"🎨", img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Paving", emoji:"🧱", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Tiling", emoji:"🔲", img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Electricity", emoji:"⚡", img:"https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Ceiling", emoji:"⬜", img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=400&q=80"},
+  {cat:"Deep Clean and General Cleaning", emoji:"🧹", img:"https://images.unsplash.com/photo-1603712725038-e9334ae8f39f?auto=format&fit=crop&w=400&q=80"},
+  {cat:"General Service", emoji:"🛠️", img:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&q=80"},
+];
+function esc(s){ return s.replace(/'/g,"\\'"); }
+function priceRowHTML(s){
+  const idx = services.indexOf(s);
+  if(!s.price){
+    return `<div class="price-row"><img onclick="openView(${idx})" src="${s.img.replace('w=800','w=300')}"><div class="price-info"><b onclick="openView(${idx})">${s.name}</b><p>${s.desc}</p></div><div class="price-tag"><b style="font-size:14px">Free Quote</b><span>${s.note}</span><button class="view-btn" onclick="openView(${idx})">👁️ View</button><a href="https://wa.me/27646000005?text=${encodeURIComponent('Hi Victor, I am in '+selectedArea+'. I want FREE QUOTE for: '+s.name)}">Book</a></div></div>`;
+  }
+  return `<div class="price-row"><img onclick="openView(${idx})" src="${s.img.replace('w=800','w=300')}"><div class="price-info"><b onclick="openView(${idx})">${s.name}</b><p>${s.desc}</p></div><div class="price-tag"><b>${s.price}</b><span>${s.note}</span><button class="view-btn" onclick="openView(${idx})">👁️ View</button><a href="https://wa.me/27646000005?text=${encodeURIComponent('Hi Victor, I am in '+selectedArea+'. I want: '+s.name+' - '+s.price)}">Book</a></div></div>`;
+}
+function openView(idx){
+  const s = services[idx];
+  currentView = s;
+  document.getElementById('viewImg').src = s.img;
+  document.getElementById('viewTitle').innerText = s.name;
+  document.getElementById('viewDesc').innerText = s.desc;
+  const priceText = s.price ? s.price + ' - ' + s.note : 'Free Quote - ' + s.note;
+  const callout = selectedArea==='Parklands' ? 'FREE' : (['Table View','Dunoon','Slovo Park','Killarney Gardens','Richwood','Sunningdale','Bloubergstrand','Milnerton','Century City','Flamingo Vlei','Blouberg Rise','West Beach','Big Bay','Marconi Beam / Montague Gardens','Brooklyn','Ysterplaat','Edgemead','Bothasig','Burgundy Estate'].includes(selectedArea) ? 'R50' : 'R80');
+  document.getElementById('viewMeta').innerHTML = '<b>💰 Price:</b> '+priceText+'<br><b>📁 Category:</b> '+s.cat+'<br><b>📍 Your Area:</b> '+selectedArea+' - Call-out: '+callout+'<br><b>🕐 Working Hours:</b> Mon - Sat: 07:00 - 18:00<br><br>'+(s.detail||s.desc);
+  const msg = s.price ? 'Hi Victor, I am in '+selectedArea+'. I want: '+s.name+' - '+s.price : 'Hi Victor, I am in '+selectedArea+'. I want FREE QUOTE for: '+s.name;
+  document.getElementById('viewBookBtn').href = 'https://wa.me/27646000005?text='+encodeURIComponent(msg);
+  document.getElementById('viewPopup').classList.add('open');
+}
+function closeView(){ document.getElementById('viewPopup').classList.remove('open'); }
+function renderFolders(){
+  document.getElementById('folderGrid').innerHTML = folders.map(f=>{
+    const count = services.filter(s=>s.cat===f.cat).length;
+    const active = currentCat===f.cat ? 'active' : '';
+    return `<div class="folder ${active}" onclick="filterService('${f.cat}')"><img src="${f.img}"><b>${f.emoji} ${f.cat}</b><small>${count} Jobs • Tap to OPEN</small><br><span>Open Folder →</span></div>`;
+  }).join('');
+}
+function renderGallery(){
+  document.getElementById('listings').innerHTML = folders.map(f=>{
+    const count = services.filter(s=>s.cat===f.cat).length;
+    const jobs = services.filter(s=>s.cat===f.cat).map(s=>s.name.replace(f.cat+' - ','').replace('Plumbing - ','')).slice(0,3).join(' • ');
+    return `<div class="card"><div class="card-top" onclick="filterService('${f.cat}')"><img src="${f.img.replace('w=400','w=800')}"><span class="tag">📁 ${f.cat} Folder</span></div><div class="card-body"><h3>${f.emoji} ${f.cat} Folder</h3><p style="font-size:13px;color:#555;line-height:1.5;margin:8px 0"><b>${count} Jobs inside this ONE folder</b><br>${jobs}...</p><a class="btn-folder" onclick="filterService('${f.cat}')">📁 View ${f.cat} Folder - ${count} Jobs</a></div></div>`;
+  }).join('');
+}
+function toggleAreas(){
+  const grid = document.getElementById('areaGrid');
+  const btn = document.getElementById('selectAreaBtn');
+  const isOpen = grid.classList.contains('open');
+  if(isOpen){ grid.classList.remove('open'); btn.innerText = "📍 Select Your Area To Book 👇"; } else { grid.classList.add('open'); btn.innerText = "✕ Close Areas"; }
+}
+function selectArea(el, area){
+  document.querySelectorAll('.area').forEach(a=>a.classList.remove('active'));
+  el.classList.add('active');
+  selectedArea = area;
+  document.getElementById('areaMsg').innerText = "✅ You selected: " + area + " - Tap View then Book and we will come to you!";
+  document.getElementById('selectAreaBtn').innerText = "📍 Your Area: " + area + " - Tap to Change 👇";
+  if(currentCat) filterService(currentCat);
+}
+function filterService(cat){
+  currentCat = cat;
+  document.getElementById('searchInput').value = cat;
+  const list = services.filter(s=>s.cat===cat);
+  document.getElementById('openedTitle').innerText = "📁 " + cat + " Folder - OPEN - " + list.length + " Jobs" + (cat==="Deep Clean and General Cleaning" ? " - No Prices, Free Quote" : " & Prices");
+  document.getElementById('openedList').innerHTML = list.map(priceRowHTML).join('');
+  document.getElementById('openedFolder').classList.add('open');
+  renderFolders();
+  document.getElementById('openedFolder').scrollIntoView({behavior:'smooth'});
+}
+function closeFolder(){
+  currentCat = "";
+  document.getElementById('openedFolder').classList.remove('open');
+  document.getElementById('searchInput').value = "";
+  renderFolders();
+}
+function toggleAllJobs(){
+  const box = document.getElementById('allJobsContent');
+  const btn = document.getElementById('allJobsBtn');
+  const isOpen = box.classList.contains('open');
+  if(isOpen){ box.classList.remove('open'); btn.innerText = "📂 Open All Jobs Folder"; } else { document.getElementById('allJobsList').innerHTML = services.map(priceRowHTML).join(''); box.classList.add('open'); btn.innerText = "✕ Close All Jobs Folder"; box.scrollIntoView({behavior:'smooth'}); }
+}
+function searchService(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  if(!q){ closeFolder(); return; }
+  const list = services.filter(s=> (s.name+s.cat+s.desc).toLowerCase().includes(q));
+  document.getElementById('openedTitle').innerText = "🔍 Search Results - " + list.length + " Jobs";
+  document.getElementById('openedList').innerHTML = list.map(priceRowHTML).join('');
+  document.getElementById('openedFolder').classList.add('open');
+}
+renderFolders();
+renderGallery();
+</script>
+</body>
+</html>
